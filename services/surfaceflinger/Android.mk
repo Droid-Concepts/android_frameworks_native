@@ -36,6 +36,9 @@ endif
 
 ifeq ($(BOARD_EGL_NEEDS_LEGACY_FB),true)
 	LOCAL_CFLAGS += -DBOARD_EGL_NEEDS_LEGACY_FB
+        ifeq ($(TARGET_BOARD_PLATFORM),exynos4)
+	    LOCAL_CFLAGS += -DEGL_NEEDS_FNW
+        endif
 endif
 
 ifneq ($(NUM_FRAMEBUFFER_SURFACE_BUFFERS),)
@@ -55,7 +58,11 @@ LOCAL_SHARED_LIBRARIES := \
 	libgui
 
 ifeq ($(TARGET_USES_QCOM_BSP), true)
+ifeq ($(TARGET_QCOM_DISPLAY_VARIANT),caf)
+    LOCAL_C_INCLUDES += hardware/qcom/display-caf/libgralloc
+else
     LOCAL_C_INCLUDES += hardware/qcom/display/libgralloc
+endif
     LOCAL_CFLAGS += -DQCOM_BSP
 endif
 
